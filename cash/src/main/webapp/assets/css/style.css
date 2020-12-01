@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+@media only screen and (max-width:990px){
+	body {
+		
+	}
+}
+
+.font {
+	font-family: 'Noto Sans KR', sans-serif;
+}

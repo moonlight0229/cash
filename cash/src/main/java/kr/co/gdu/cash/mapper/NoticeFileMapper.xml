@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gdu.cash.mapper.NoticeFileMapper">
+	<!-- 해당 공지사항에 첨부된 파일이름 목록 불러오기 쿼리문 -->
+	<select id="selectNoticeFileNameList" parameterType="int" resultType="String">
+		SELECT notice_file_name
+		FROM notice_file
+		WHERE notice_id = #{noticeId}
+	</select>
+	
+	<!-- 공지사항 작성 시 파일 업로드 쿼리문 -->
+	<insert id="insertNoticeFile" parameterType="kr.co.gdu.cash.vo.NoticeFile">
+		INSERT INTO notice_file (
+			notice_id,
+			notice_file_name,
+			notice_file_type,
+			notice_file_size
+		) VALUES (
+			#{noticeId},
+			#{noticeFileName},
+			#{noticeFileType},
+			#{noticeFileSize}
+		)
+	</insert>
+	
+	<!-- 공지사항 수정 시 삭제할 파일이름 불러오는 쿼리문 -->
+	<select id="selectDelNoticeFileName" parameterType="int" resultType="String">
+		SELECT notice_file_name
+		FROM notice_file
+		WHERE notice_file_id = #{noticeFileId}
+	</select>
+	
+	<!-- 공지사항 수정 시 첨부파일 개별 삭제 -->
+	<delete id="deleteNoticeFileOne" parameterType="int">
+		DELETE FROM notice_file
+		WHERE notice_file_id = #{noticeFileId}
+	</delete>
+	
+	<!-- 공지사항 삭제 시 첨부파일 일괄 삭제 -->
+	<delete id="deleteNoticeFileAll" parameterType="int">
+		DELETE FROM notice_file
+		WHERE notice_id = ${noticeId}
+	</delete>
+</mapper>

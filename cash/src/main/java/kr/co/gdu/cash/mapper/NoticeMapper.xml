@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gdu.cash.mapper.NoticeMapper">
+	<!-- 공지사항에 파일과 댓글을 추가하기 위한 resultMap-->
+	<resultMap type="kr.co.gdu.cash.vo.Notice" id="selectNoticeOneResult">
+		<result property="noticeId" column="notice_id"/>
+		<result property="noticeTitle" column="notice_title"/>
+		<result property="noticeContent" column="notice_content"/>
+		<result property="noticeDate" column="notice_date"/>
+		<result property="noticeUpdateDate" column="notice_update_date"/>
+		<collection property="noticeFileList" ofType="kr.co.gdu.cash.vo.NoticeFile">
+			<result property="noticeFileId" column="notice_file_id"/>
+			<result property="noticeId" column="notice_id"/>
+			<result property="noticeFileName" column="notice_file_name"/>
+			<result property="noticeFileType" column="notice_file_type"/>
+			<result property="noticeFileSize" column="notice_file_size"/>
+		</collection>
+		<collection property="noticeCommentList" ofType="kr.co.gdu.cash.vo.NoticeComment">
+			<result property="noticeCommentId" column="notice_comment_id"/>
+			<result property="noticeId" column="notice_id"/>
+			<result property="noticeCommentContent" column="notice_comment_content"/>
+			<result property="noticeCommentDate" column="notice_comment_date"/>
+		</collection>
+	</resultMap>
+
+	<!-- 로그인, index 페이지에 최근 공지사항 5개를 출력하는 쿼리문 -->
+	<select id="selectLatestNoticeList" resultType="kr.co.gdu.cash.vo.Notice">
+		SELECT
+			notice_id noticeId,
+			notice_title noticeTitle,
+			notice_date noticeDate
+		FROM notice
+		ORDER BY notice_date DESC
+		LIMIT 0, 5
+	</select>
+	
+	<!-- 공지사항을 페이징하여 출력하는 쿼리문 -->
+	<select id="selectNoticeListByPage" parameterType="java.util.Map" resultType="kr.co.gdu.cash.vo.Notice">
+		SELECT
+			notice_id noticeId,
+			notice_title noticeTitle,
+			notice_date noticeDate
+		FROM notice
+		ORDER BY notice_date DESC
+		LIMIT #{beginRow}, #{rowPerPage} 
+	</select>
+	
+	<!-- 공지사항 목록 페이지 카운트 -->
+	<select id="countNotice" resultType="int">
+		SELECT COUNT(*) FROM notice
+	</select>
+	
+	<!-- 공지사항 상세보기 쿼리문 -->
+	<select id="selectNoticeOne" parameterType="int" resultMap="selectNoticeOneResult">
+	  	SELECT
+	  		n.notice_id,
+			n.notice_title,
+			n.notice_content, 
+			n.notice_date,
+			n.notice_update_date,
+			nf.notice_file_id,
+			nf.notice_id,
+			nf.notice_file_name,
+			nf.notice_file_type,
+			nf.notice_file_size,
+			nc.notice_comment_id,
+			nc.notice_id,
+			nc.notice_comment_content,
+			nc.notice_comment_date
+		FROM notice n
+		LEFT OUTER JOIN notice_file nf
+		ON n.notice_id = nf.notice_id
+		LEFT OUTER JOIN notice_comment nc
+		ON n.notice_id = nc.notice_id
+		WHERE n.notice_id = #{noticeId}
+	</select>
+	
+	<!-- 공지사항 추가 쿼리문 -->
+	<insert id="insertNotice" parameterType="kr.co.gdu.cash.vo.Notice">
+		<selectKey resultType="int" keyProperty="noticeId" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO notice (
+			notice_title, 
+			notice_content, 
+			notice_date,
+			notice_update_date
+		) VALUES (
+			#{noticeTitle}, 
+			#{noticeContent}, 
+			NOW(),
+			NOW()
+		)
+	</insert>
+	
+	<!-- 공지사항 수정 쿼리문 -->
+	<update id="updateNotice" parameterType="kr.co.gdu.cash.vo.Notice">
+		UPDATE notice SET
+			notice_title = #{noticeTitle},
+			notice_content = #{noticeContent},
+			notice_update_date = NOW()
+		WHERE notice_id = #{noticeId}
+	</update>
+	
+	<!-- 공지사항 삭제 쿼리문 -->
+	<delete id="deleteNotice" parameterType="Integer">
+		DELETE FROM notice
+		WHERE notice_id = #{noticeId}
+	</delete>
+</mapper>

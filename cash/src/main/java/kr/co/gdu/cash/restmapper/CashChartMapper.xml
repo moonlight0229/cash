@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.gdu.cash.restmapper.CashChartMapper">
+	<!-- 해당 연도의 월별 수입 막대 차트 -->
+	<select id="selectInBarChartByYear" parameterType="int" resultType="java.util.Map">
+		SELECT
+			YEAR(cashbook_date) AS year,
+			sum(case when month(cashbook_date)=1 then cashbook_price END) January,
+			sum(case when month(cashbook_date)=2 then cashbook_price END) February,
+			sum(case when month(cashbook_date)=3 then cashbook_price END) March,
+			sum(case when month(cashbook_date)=4 then cashbook_price END) April,
+			sum(case when month(cashbook_date)=5 then cashbook_price END) May,
+			sum(case when month(cashbook_date)=6 then cashbook_price END) June,
+			sum(case when month(cashbook_date)=7 then cashbook_price END) July,
+			sum(case when month(cashbook_date)=8 then cashbook_price END) August,
+			sum(case when month(cashbook_date)=9 then cashbook_price END) September,
+			sum(case when month(cashbook_date)=10 then cashbook_price END) October,
+			sum(case when month(cashbook_date)=11 then cashbook_price END) November,
+			sum(case when month(cashbook_date)=12 then cashbook_price END) December
+		FROM cashbook
+		WHERE YEAR(cashbook_date) = #{year}
+		AND cashbook_kind = "수입"
+		GROUP BY Year(cashbook_date)
+	</select>
+	
+	<!-- 해당 연도의 월별 지출 막대 차트 -->
+	<select id="selectOutBarChartByYear" parameterType="int" resultType="java.util.Map">
+		SELECT 
+			YEAR(cashbook_date) AS year,
+			sum(case when month(cashbook_date)=1 then cashbook_price END) January,
+			sum(case when month(cashbook_date)=2 then cashbook_price END) February,
+			sum(case when month(cashbook_date)=3 then cashbook_price END) March,
+			sum(case when month(cashbook_date)=4 then cashbook_price END) April,
+			sum(case when month(cashbook_date)=5 then cashbook_price END) May,
+			sum(case when month(cashbook_date)=6 then cashbook_price END) June,
+			sum(case when month(cashbook_date)=7 then cashbook_price END) July,
+			sum(case when month(cashbook_date)=8 then cashbook_price END) August,
+			sum(case when month(cashbook_date)=9 then cashbook_price END) September,
+			sum(case when month(cashbook_date)=10 then cashbook_price END) October,
+			sum(case when month(cashbook_date)=11 then cashbook_price END) November,
+			sum(case when month(cashbook_date)=12 then cashbook_price END) December
+		FROM cashbook
+		WHERE YEAR(cashbook_date) = #{year}
+		AND cashbook_kind = "지출"
+		GROUP BY Year(cashbook_date)
+	</select>
+	
+	<!-- 연간 월별 수입/지출 막대 차트 -->
+	<select id="selectInOutBarChartByYear" parameterType="int" resultType="java.util.Map">
+		SELECT
+			YEAR(cashbook_date) AS year,
+			sum(case when month(cashbook_date)=1 and cashbook_kind = "수입" then cashbook_price END) inJanuary,
+			sum(case when month(cashbook_date)=2 and cashbook_kind = "수입" then cashbook_price END) inFebruary,
+			sum(case when month(cashbook_date)=3 and cashbook_kind = "수입" then cashbook_price END) inMarch,
+			sum(case when month(cashbook_date)=4 and cashbook_kind = "수입" then cashbook_price END) inApril,
+			sum(case when month(cashbook_date)=5 and cashbook_kind = "수입" then cashbook_price END) inMay,
+			sum(case when month(cashbook_date)=6 and cashbook_kind = "수입" then cashbook_price END) inJune,
+			sum(case when month(cashbook_date)=7 and cashbook_kind = "수입" then cashbook_price END) inJuly,
+			sum(case when month(cashbook_date)=8 and cashbook_kind = "수입" then cashbook_price END) inAugust,
+			sum(case when month(cashbook_date)=9 and cashbook_kind = "수입" then cashbook_price END) inSeptember,
+			sum(case when month(cashbook_date)=10 and cashbook_kind = "수입" then cashbook_price END) inOctober,
+			sum(case when month(cashbook_date)=11 and cashbook_kind = "수입" then cashbook_price END) inNovember,
+			sum(case when month(cashbook_date)=12 and cashbook_kind = "수입" then cashbook_price END) inDecember,
+			
+			sum(case when month(cashbook_date)=1 and cashbook_kind = "지출" then cashbook_price END) outJanuary,
+			sum(case when month(cashbook_date)=2 and cashbook_kind = "지출" then cashbook_price END) outFebruary,
+			sum(case when month(cashbook_date)=3 and cashbook_kind = "지출" then cashbook_price END) outMarch,
+			sum(case when month(cashbook_date)=4 and cashbook_kind = "지출" then cashbook_price END) outApril,
+			sum(case when month(cashbook_date)=5 and cashbook_kind = "지출" then cashbook_price END) outMay,
+			sum(case when month(cashbook_date)=6 and cashbook_kind = "지출" then cashbook_price END) outJune,
+			sum(case when month(cashbook_date)=7 and cashbook_kind = "지출" then cashbook_price END) outJuly,
+			sum(case when month(cashbook_date)=8 and cashbook_kind = "지출" then cashbook_price END) outAugust,
+			sum(case when month(cashbook_date)=9 and cashbook_kind = "지출" then cashbook_price END) outSeptember,
+			sum(case when month(cashbook_date)=10 and cashbook_kind = "지출" then cashbook_price END) outOctober,
+			sum(case when month(cashbook_date)=11 and cashbook_kind = "지출" then cashbook_price END) outNovember,
+			sum(case when month(cashbook_date)=12 and cashbook_kind = "지출" then cashbook_price END) outDecember
+		FROM cashbook
+		WHERE YEAR(cashbook_date) = #{year}
+		GROUP BY Year(cashbook_date)
+	</select>
+	
+	<!-- 연간 총 수입/지출 도넛 차트 -->
+	<select id="selectInOutDoughnutChartByYear" parameterType="int" resultType="java.util.Map">
+		SELECT
+			YEAR(cashbook_date) AS year,
+			SUM(case when cashbook_kind = "수입" then cashbook_price END) "수입",
+			SUM(case when cashbook_kind = "지출" then cashbook_price END) "지출"
+		FROM cashbook
+		WHERE YEAR(cashbook_date) = #{year}
+		GROUP BY Year(cashbook_date)
+	</select>
+	
+	<!-- 연간 자산 선 차트 -->
+	<select id="selectTotalLineChartByYear" parameterType="int" resultType="java.util.Map">
+		SELECT
+			YEAR(cashbook_date) AS year,
+			sum(case when month(cashbook_date)=1 and cashbook_kind = "수입" then cashbook_price END) inJanuary,
+			sum(case when month(cashbook_date)=2 and cashbook_kind = "수입" then cashbook_price END) inFebruary,
+			sum(case when month(cashbook_date)=3 and cashbook_kind = "수입" then cashbook_price END) inMarch,
+			sum(case when month(cashbook_date)=4 and cashbook_kind = "수입" then cashbook_price END) inApril,
+			sum(case when month(cashbook_date)=5 and cashbook_kind = "수입" then cashbook_price END) inMay,
+			sum(case when month(cashbook_date)=6 and cashbook_kind = "수입" then cashbook_price END) inJune,
+			sum(case when month(cashbook_date)=7 and cashbook_kind = "수입" then cashbook_price END) inJuly,
+			sum(case when month(cashbook_date)=8 and cashbook_kind = "수입" then cashbook_price END) inAugust,
+			sum(case when month(cashbook_date)=9 and cashbook_kind = "수입" then cashbook_price END) inSeptember,
+			sum(case when month(cashbook_date)=10 and cashbook_kind = "수입" then cashbook_price END) inOctober,
+			sum(case when month(cashbook_date)=11 and cashbook_kind = "수입" then cashbook_price END) inNovember,
+			sum(case when month(cashbook_date)=12 and cashbook_kind = "수입" then cashbook_price END) inDecember,
+			
+			sum(case when month(cashbook_date)=1 and cashbook_kind = "지출" then cashbook_price END) outJanuary,
+			sum(case when month(cashbook_date)=2 and cashbook_kind = "지출" then cashbook_price END) outFebruary,
+			sum(case when month(cashbook_date)=3 and cashbook_kind = "지출" then cashbook_price END) outMarch,
+			sum(case when month(cashbook_date)=4 and cashbook_kind = "지출" then cashbook_price END) outApril,
+			sum(case when month(cashbook_date)=5 and cashbook_kind = "지출" then cashbook_price END) outMay,
+			sum(case when month(cashbook_date)=6 and cashbook_kind = "지출" then cashbook_price END) outJune,
+			sum(case when month(cashbook_date)=7 and cashbook_kind = "지출" then cashbook_price END) outJuly,
+			sum(case when month(cashbook_date)=8 and cashbook_kind = "지출" then cashbook_price END) outAugust,
+			sum(case when month(cashbook_date)=9 and cashbook_kind = "지출" then cashbook_price END) outSeptember,
+			sum(case when month(cashbook_date)=10 and cashbook_kind = "지출" then cashbook_price END) outOctober,
+			sum(case when month(cashbook_date)=11 and cashbook_kind = "지출" then cashbook_price END) outNovember,
+			sum(case when month(cashbook_date)=12 and cashbook_kind = "지출" then cashbook_price END) outDecember,
+		
+			sum(case when month(cashbook_date)=1 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=1 and cashbook_kind = "지출" then cashbook_price END) totalJanuary,
+			sum(case when month(cashbook_date)=2 and cashbook_kind = "수입" then cashbook_price END) 
+			-sum(case when month(cashbook_date)=2 and cashbook_kind = "지출" then cashbook_price END) totalFebruary,
+			sum(case when month(cashbook_date)=3 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=3 and cashbook_kind = "지출" then cashbook_price END) totalMarch,
+			sum(case when month(cashbook_date)=4 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=4 and cashbook_kind = "지출" then cashbook_price END) totalApril,
+			sum(case when month(cashbook_date)=5 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=5 and cashbook_kind = "지출" then cashbook_price END) totalMay,
+			sum(case when month(cashbook_date)=6 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=6 and cashbook_kind = "지출" then cashbook_price END) totalJune,
+			sum(case when month(cashbook_date)=7 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=7 and cashbook_kind = "지출" then cashbook_price END) totalJuly,
+			sum(case when month(cashbook_date)=8 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=8 and cashbook_kind = "지출" then cashbook_price END) totalAugust,
+			sum(case when month(cashbook_date)=9 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=9 and cashbook_kind = "지출" then cashbook_price END) totalSeptember,
+			sum(case when month(cashbook_date)=10 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=10 and cashbook_kind = "지출" then cashbook_price END) totalOctober,
+			sum(case when month(cashbook_date)=11 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=11 and cashbook_kind = "지출" then cashbook_price END) totalNovember,
+			sum(case when month(cashbook_date)=12 and cashbook_kind = "수입" then cashbook_price END)
+			-sum(case when month(cashbook_date)=12 and cashbook_kind = "지출" then cashbook_price END) totalDecember
+		FROM cashbook
+		WHERE YEAR(cashbook_date) = #{year}
+		GROUP BY Year(cashbook_date)
+	</select>
+	
+	<!-- 연간 카테고리 별 수입 차트 -->
+	<select id="selectInCategoryChartByYear" parameterType="int" resultType="java.util.Map">
+		SELECT
+			YEAR(cashbook_date) AS year,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "수입" AND category_name="금융이자" then cashbook_price END) as 금융이자,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "수입" AND category_name="급여" then cashbook_price END) as 급여
+		FROM cashbook
+		WHERE YEAR(cashbook_date) = #{year}
+		GROUP BY Year(cashbook_date)
+	</select>
+	
+	<!-- 연간 카테고리 별 지출 차트 -->
+	<select id="selectOutCategoryChartByYear" parameterType="int" resultType="java.util.Map">
+		SELECT
+			YEAR(cashbook_date) AS year,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="관광" then cashbook_price END) as 관광,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="교육" then cashbook_price END) as 교육,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="교통" then cashbook_price END) as 교통,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="문화" then cashbook_price END) as 문화,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="생활" then cashbook_price END) as 생활,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="식비" then cashbook_price END) as 식비,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="의료" then cashbook_price END) as 의료,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="주거" then cashbook_price END) as 주거,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="카페/간식" then cashbook_price END) as 카페,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="통신" then cashbook_price END) as 통신,
+			sum(case when YEAR(cashbook_date) and cashbook_kind = "지출" AND category_name="편의점/마트/잡화" then cashbook_price END) as 편의점
+		FROM cashbook
+		WHERE YEAR(cashbook_date) = #{year}
+		GROUP BY Year(cashbook_date)
+	</select>
+	
+	<!-- 최근 5년간 자산현황 차트 -->
+ 	<select id="selectTotalChartByFiveYear" resultType="java.util.Map">
+	 	SELECT 
+			DATE_FORMAT(cashbook_date, '%Y') AS "year",
+			SUM((case when cashbook_kind = '수입' then cashbook_price ELSE 0 END)
+			- (case when cashbook_kind = '지출' then cashbook_price ELSE 0 END)) AS "total"
+		FROM cashbook
+		GROUP BY DATE_FORMAT(cashbook_date, '%Y')
+		ORDER BY cashbook_date DESC
+		LIMIT 0, 5
+ 	</select>
+</mapper>

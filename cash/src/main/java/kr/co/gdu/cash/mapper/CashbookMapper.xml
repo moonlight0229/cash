@@ -13,12 +13,12 @@
 			cashbook_content cashbookContent,
 			cashbook_date cashbookDate			
 		FROM cashbook
-		ORDER BY cashbook_date DESC, cashbook_id DESC
+		ORDER BY cashbook_date DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
 	
 	<!-- 수입/지출 내역 목록 페이지 카운트-->
-	<select id="countCashbook" resultType="Integer">
+	<select id="selectCountCashbook" resultType="int">
 		SELECT COUNT(*) FROM cashbook
 	</select>
 
@@ -49,7 +49,7 @@
  	</select>
  	
  	<!-- 월별 수입/지출 합계를 각각 출력하는 쿼리문 -->
- 	<select id="selectSumCashPriceByInOut" parameterType="java.util.Map" resultType="Integer">
+ 	<select id="selectSumCashInOutPriceByMonth" parameterType="java.util.Map" resultType="Integer">
  		SELECT NVL(SUM(cashbook_price), 0)
 		FROM cashbook
 		WHERE cashbook_kind = #{cashbookKind}
@@ -70,6 +70,16 @@
 		AND MONTH(cashbook_date) = #{currentMonth}
 		AND DAY(cashbook_date) = #{currentDay}
 	</select>
+	
+	<!-- 일별 수입/지출 합계를 각각 출력하는 쿼리문 -->
+ 	<select id="selectSumCashInOutPriceByDay" parameterType="java.util.Map" resultType="Integer">
+ 		SELECT NVL(SUM(cashbook_price), 0)
+		FROM cashbook
+		WHERE cashbook_kind = #{cashbookKind}
+		AND YEAR(cashbook_date) = #{currentYear}
+		AND MONTH(cashbook_date) = #{currentMonth}
+		AND DAY(cashbook_date) = #{currentDay}
+ 	</select>
 	
 	<!-- 수입/지출 내역을 수정하기 위해 값을 가져오는 쿼리문 -->
 	<select id="selectCashbookOne" parameterType="Integer" resultType="kr.co.gdu.cash.vo.Cashbook">

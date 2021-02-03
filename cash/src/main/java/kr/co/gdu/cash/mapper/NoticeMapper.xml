@@ -46,7 +46,7 @@
 	</select>
 	
 	<!-- 공지사항 목록 페이지 카운트 -->
-	<select id="countNotice" resultType="int">
+	<select id="selectCountNotice" resultType="int">
 		SELECT COUNT(*) FROM notice
 	</select>
 	

@@ -9,14 +9,11 @@ import kr.co.gdu.cash.vo.Cashbook;
 
 @Mapper
 public interface CashbookMapper {
-	// 엑셀
-	List<Cashbook> selectCashbookAll();
-	
 	// 전체 수입/지출 내역 리스트로 보기
 	List<Cashbook> selectCashListByPage(Map<String, Object> map);
 	
 	// 수입/지출 내역 페이지 카운트
-	int countCashbook();
+	int selectCountCashbook();
 	
 	// 월별 수입/지출 내역 달력 보기
 	List<Map<String, Object>> selectCashListByMonth(Map<String, Object> map);
@@ -25,10 +22,13 @@ public interface CashbookMapper {
 	List<Map<String, Object>> selectCashInOutList();
 	
 	// 월별 수입/지출 합계를 각각 출력하는 쿼리문
-	Integer selectSumCashPriceByInOut(Map<String, Object> map);
+	Integer selectSumCashInOutPriceByMonth(Map<String, Object> map);
 	
 	// 일별 수입/지출 내역 출력
 	List<Cashbook> selectCashbookListByDay(Map<String, Object> map);
+	
+	// 일별 수입/지출 합계를 각각 출력하는 쿼리문
+	Integer selectSumCashInOutPriceByDay(Map<String, Object> map);
 	
 	// 수입/지출 내역 상세보기
 	Cashbook selectCashbookOne(int cashbookId);

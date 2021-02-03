@@ -1,6 +1,6 @@
 package kr.co.gdu.cash.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,40 +22,17 @@ public class NoticeController {
 	
 	// 공지사항 목록 출력
 	@GetMapping("/admin/noticeList/{currentPage}")
-	public String noticeList(Model model, @PathVariable(value = "currentPage") int currentPage) {
-		int rowPerPage = 10;
+	public String noticeList(Model model,
+			@PathVariable(value = "currentPage", required = true) int currentPage) {
+		Map<String, Object> map = noticeService.getNoticeListByPage(currentPage);
+		logger.debug(map.toString());
 		
-		List<Notice> noticeList = noticeService.getNoticeListByPage(currentPage, rowPerPage);
-		logger.debug(noticeList.toString());
-
-		int totalCount = noticeService.getCountNotice();	// 전체 데이터
-		int lastPage = totalCount / rowPerPage;	// 마지막 페이지
-
-		if (totalCount % rowPerPage != 0) {	// 10 미만의 개수의 데이터가 있는 페이지를 표시
-			lastPage += 1;
-		}
-
-		if (lastPage == 0) { // 전체 페이지가 0개이면 현재 페이지도 0으로 표시
-			currentPage = 0;
-		}
-
-		int navPerPage = 10;	// 네비게이션에 표시할 페이지 수
-		int navFirstPage = currentPage - (currentPage % navPerPage) + 1;	// 네비게이션 첫번째 페이지
-		int navLastPage = navFirstPage + navPerPage - 1;	// 네비게이션 마지막 페이지
-
-		if (currentPage % navPerPage == 0 && currentPage != 0) {	// 10으로 나누어 떨어지는 경우 처리하는 코드
-			navFirstPage = navFirstPage - navPerPage;
-			navLastPage = navLastPage - navPerPage;
-		}
-
-		model.addAttribute("noticeList", noticeList);
-
+		model.addAttribute("noticeList", map.get("noticeList"));
 		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("lastPage", lastPage);
-
-		model.addAttribute("navPerPage", navPerPage);
-		model.addAttribute("navFirstPage", navFirstPage);
-		model.addAttribute("navLastPage", navLastPage);
+		model.addAttribute("lastPage", map.get("lastPage"));
+		model.addAttribute("pageNaviSize", map.get("pageNaviSize"));
+		model.addAttribute("pageNaviBegin", map.get("pageNaviBegin"));
+		model.addAttribute("pageNaviEnd", map.get("pageNaviEnd"));
 		
 		return "noticeList";
 	}

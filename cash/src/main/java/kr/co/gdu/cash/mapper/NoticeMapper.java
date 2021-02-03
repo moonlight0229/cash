@@ -13,10 +13,10 @@ public interface NoticeMapper {
 	List<Notice> selectLatestNoticeList();
 	
 	// 공지사항을 페이징하여 출력하는 메소드
-	List<Notice> selectNoticeListByPage(Map<String, Integer> map);
+	List<Notice> selectNoticeListByPage(Map<String, Object> map);
 	
 	// 공지사항 페이지 카운트
-	int countNotice();
+	int selectCountNotice();
 	
 	// 공지사항 상세보기
 	Notice selectNoticeOne(int noticeId);

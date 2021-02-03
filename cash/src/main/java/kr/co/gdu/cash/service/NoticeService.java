@@ -26,12 +26,13 @@ import kr.co.gdu.cash.vo.NoticeForm;
 @Transactional
 public class NoticeService {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired private NoticeMapper noticeMapper;
 	@Autowired private NoticeFileMapper noticeFileMapper;
 	@Autowired private NoticeCommentMapper noticeCommentMapper;
 	@Autowired private CashbookMapper cashbookMapper;
 	
-	private final String PATH = "D:\\Moon\\Work_space\\Spring\\spring_git_work\\cash\\src\\main\\webapp\\upload\\";
+	private final String PATH = "/home/ubuntu/tomcat9/cash/src/main/webapp/upload";
 	
 	// index에 공지사항 5개 출력 출력
 	public List<Notice> getNoticeList() {
@@ -39,22 +40,53 @@ public class NoticeService {
 	}
 	
 	// 공지사항을 페이징하는 메소드
-	public List<Notice> getNoticeListByPage(int currentPage, int rowPerPage) {
-		// int currentPage, int rowPerPage -> beginRow
-		// noticeMapper 메소드를 호출
+	public Map<String, Object> getNoticeListByPage(int currentPage) {
+		// 한 페이지에 보여줄 항목 10개 
+		int rowPerPage = 10;
+		// 해당 페이지에 표시한 항목
 		int beginRow = (currentPage - 1) * rowPerPage;
-
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("beginRow", beginRow);
-		map.put("rowPerPage", rowPerPage);
-
-		List<Notice> noticeList = noticeMapper.selectNoticeListByPage(map);
-		return noticeList;		
-	}
+		// 총 항목수
+		int totalCount = noticeMapper.selectCountNotice();
+		// 마지막 페이지
+		int lastPage = totalCount / rowPerPage;
+		// 페이지 네비게이션 바에 표시할 페이지 수
+		int pageNaviSize = 10;
+		// 페이지 네비게이션 바의 첫번째 값
+		int pageNaviBegin = (currentPage - 1) / pageNaviSize * pageNaviSize + 1;
+		// 페이지 네비게이션 바의 마지막 값
+		int pageNaviEnd = (pageNaviBegin + pageNaviSize) - 1;
 		
-	// 공지사항 페이지 카운트
-	public int getCountNotice() {
-		return noticeMapper.countNotice();
+		// 한 페이지에 보여줄 항목수 미만의 항목이 남을 경우 마지막 페이지를 한 페이지 추가
+		if (totalCount % rowPerPage != 0) {
+			lastPage += 1;
+		}
+
+		// 만약 마지막 페이지가 0이라면 현재 페이지도 0이 됨
+		if (lastPage == 0) {
+			currentPage = 0;
+		}
+		
+		// 만약 네비게이션 바의 마지막 값이 마지막 페이지보다 크다면 네비게이션 바의 마지막 값은 마지막 페이지가 됨
+		if (pageNaviEnd > lastPage) {
+			pageNaviEnd = lastPage;
+		}
+		
+		// 리턴값 저장
+		Map<String, Object> returnMap = new HashMap<>();
+		returnMap.put("lastPage", lastPage);
+		returnMap.put("pageNaviSize", pageNaviSize);
+		returnMap.put("pageNaviBegin", pageNaviBegin);
+		returnMap.put("pageNaviEnd", pageNaviEnd);
+		
+		// 파라미터값 저장
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("rowPerPage", rowPerPage);
+		paramMap.put("beginRow", beginRow);
+		
+		List<Notice> noticeList = noticeMapper.selectNoticeListByPage(paramMap);
+		returnMap.put("noticeList", noticeList);
+		
+		return returnMap;
 	}
 	
 	// index 페이지에 최신 공지사항 5개와 최근 3달간 수입/지출 내역을 보여주는 메소드

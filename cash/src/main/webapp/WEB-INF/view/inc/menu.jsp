@@ -24,19 +24,19 @@
 				<a class="nav-link" href="${pageContext.request.contextPath}/admin/index">홈으로</a>
 			</li>
 			<li class="nav-item">
-			<a class="nav-link" href="${pageContext.request.contextPath}/admin/cashbookByMonth/-1/-1">달력 보기</a>
+			<a class="nav-link" href="${pageContext.request.contextPath}/admin/cashbookByMonth/-1/-1">달력보기</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="${pageContext.request.contextPath}/admin/cashbookList/1">내역 보기</a>
+				<a class="nav-link" href="${pageContext.request.contextPath}/admin/cashbookList/1">내역보기</a>
 			</li>
 			<li class="nav-item">	
-				<a class="nav-link" href="${pageContext.request.contextPath}/admin/chart1.jsp">차트 보기</a>
+				<a class="nav-link" href="${pageContext.request.contextPath}/admin/chart1.jsp">차트보기</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="${pageContext.request.contextPath}/admin/noticeList/1">공지사항</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="${pageContext.request.contextPath}/admin/addMember">사용자 추가</a>
+				<a class="nav-link" href="${pageContext.request.contextPath}/admin/addMember">사용자추가</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="${pageContext.request.contextPath}/admin/logout"><font color="red">로그아웃</font></a>

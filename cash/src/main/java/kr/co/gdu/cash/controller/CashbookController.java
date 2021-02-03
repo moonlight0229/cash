@@ -23,38 +23,16 @@ public class CashbookController {
 	
 	// 내역 리스트로 출력
 	@GetMapping("/admin/cashbookList/{currentPage}")
-	public String cashbookList(Model model, @PathVariable(name = "currentPage", required = true) int currentPage) {
-		int rowPerPage = 20;
-		
-		List<Cashbook> cashbookList = cashbookService.getCashbookListByPage(currentPage, rowPerPage);
-		int totalCount = cashbookService.getCountCashbook();// 전체 데이터
-		int lastPage = totalCount / rowPerPage;	// 마지막 페이지
+	public String cashbookList(Model model,
+			@PathVariable(name = "currentPage", required = true) int currentPage) {	
+		Map<String, Object> map = cashbookService.getCashbookListByPage(currentPage);
 
-		if (totalCount % rowPerPage != 0) {	// 10 미만의 개수의 데이터가 있는 페이지를 표시
-			lastPage += 1;
-		}
-
-		if (lastPage == 0) { // 전체 페이지가 0개이면 현재 페이지도 0으로 표시
-			currentPage = 0;
-		}
-
-		int navPerPage = 10;	// 네비게이션에 표시할 페이지 수
-		int navFirstPage = currentPage - (currentPage % navPerPage) + 1;	// 네비게이션 첫번째 페이지
-		int navLastPage = navFirstPage + navPerPage - 1;	// 네비게이션 마지막 페이지
-
-		if (currentPage % navPerPage == 0 && currentPage != 0) {	// 10으로 나누어 떨어지는 경우 처리하는 코드
-			navFirstPage = navFirstPage - navPerPage;
-			navLastPage = navLastPage - navPerPage;
-		}
-
-		model.addAttribute("cashbookList", cashbookList);
-
+		model.addAttribute("cashbookList", map.get("cashbookList"));
 		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("lastPage", lastPage);
-
-		model.addAttribute("navPerPage", navPerPage);
-		model.addAttribute("navFirstPage", navFirstPage);
-		model.addAttribute("navLastPage", navLastPage);
+		model.addAttribute("lastPage", map.get("lastPage"));
+		model.addAttribute("pageNaviSize", map.get("pageNaviSize"));
+		model.addAttribute("pageNaviBegin", map.get("pageNaviBegin"));
+		model.addAttribute("pageNaviEnd", map.get("pageNaviEnd"));
 		
 		return "cashbookList";
 	}
@@ -89,8 +67,8 @@ public class CashbookController {
 		int lastDay = currentDay.getActualMaximum(Calendar.DATE); // 월의 마지막 일 
 		int firstDayOfWeek = currentDay.get(Calendar.DAY_OF_WEEK); // 1일의 요일
 		//-------------------------------------------------------------------------------------------------------------
-		int sumIn = cashbookService.getSumCashbookPriceByInOut("수입", currentYear, currentMonth);
-		int sumOut = cashbookService.getSumCashbookPriceByInOut("지출", currentYear, currentMonth);
+		int sumIn = cashbookService.getSumCashbookInOutPriceByMonth("수입", currentYear, currentMonth);
+		int sumOut = cashbookService.getSumCashbookInOutPriceByMonth("지출", currentYear, currentMonth);
 		//-------------------------------------------------------------------------------------------------------------
 		List<Map<String, Object>> cashList = cashbookService.getCashListByMonth(currentYear, currentMonth);
 		//-------------------------------------------------------------------------------------------------------------
@@ -127,11 +105,18 @@ public class CashbookController {
 			targetDay.add(Calendar.DATE, +1);
 		}
 		
+		int sumIn = cashbookService.getSumCashbookInOutPriceByDay("수입", targetDay.get(Calendar.YEAR), targetDay.get(Calendar.MONTH)+1, targetDay.get(Calendar.DATE));
+		int sumOut = cashbookService.getSumCashbookInOutPriceByDay("지출", targetDay.get(Calendar.YEAR), targetDay.get(Calendar.MONTH)+1, targetDay.get(Calendar.DATE));
+
 		List<Cashbook> cashbookList = cashbookService.getCashbookListByDay(targetDay.get(Calendar.YEAR), targetDay.get(Calendar.MONTH)+1, targetDay.get(Calendar.DATE));
+		
 		model.addAttribute("cashbookList", cashbookList);
 		model.addAttribute("currentYear", targetDay.get(Calendar.YEAR));
 		model.addAttribute("currentMonth", targetDay.get(Calendar.MONTH)+1);
 		model.addAttribute("currentDay", targetDay.get(Calendar.DATE));
+		model.addAttribute("sumIn", sumIn); // 수입
+		model.addAttribute("sumOut", sumOut); // 지출
+		System.out.println(sumOut);
 		
 		return "cashbookByDay";
 	}

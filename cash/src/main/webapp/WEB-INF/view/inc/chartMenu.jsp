@@ -12,7 +12,7 @@
 	}
 </style>
 
-<div class="container font">
+<div class="container font d-flex justify-content-between">
 	<a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/admin/chart1.jsp">
 		연간 월별 수입
 	</a>

@@ -10,14 +10,4 @@
 		FROM member
 		WHERE id = #{id}
 	</select>
-	
-	<insert id="insertMember" parameterType="kr.co.gdu.cash.vo.Member">
-		INSERT INTO member(
-			id,
-			pw
-		) VALUES (
-			#{id}
-			#{pw}
-		)
-	</insert>
 </mapper>

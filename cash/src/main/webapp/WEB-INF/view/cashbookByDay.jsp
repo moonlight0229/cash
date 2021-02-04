@@ -97,11 +97,20 @@
 				</table>
 			</div>
 			
-			<div class="d-flex justify-content-end mt-3 mb-3">
-				<a class="btn btn-outline-success" href="${pageContext.request.contextPath}/admin/addCashbook/${currentYear}/${currentMonth}/${currentDay}">
-					추가
-				</a>
-			</div>
+			<table class="mt-3 mb-3" style="width:100%;">
+				<tr>
+					<td style="width:30%; vertical-align:middle;" align="left">
+						<a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/admin/cashbookByMonth/${currentYear}/${currentMonth}">
+							달력으로
+						</a>
+					</td>
+					<td style="width:30%; vertical-align:middle;" align="right">
+						<a class="btn btn-outline-success" href="${pageContext.request.contextPath}/admin/addCashbook/${currentYear}/${currentMonth}/${currentDay}">
+							추가
+						</a>
+					</td>
+				</tr>
+			</table>
 			
 			<table class="table">
 				<thead>

@@ -41,17 +41,25 @@
 		
 		<div class="container">
 			<!-- 공지사항 내용 -->
-			<h2>공지사항 상세보기</h2>
+			<h2 class="mb-3">공지사항 상세보기</h2>
 			
-			<a href="${pageContext.request.contextPath}/admin/noticeList/1">
-				[목록]
-			</a>
-			<a href="${pageContext.request.contextPath}/admin/modifyNotice/${notice.noticeId}">
-				[수정]
-			</a>
-			<a href="${pageContext.request.contextPath}/admin/removeNotice/${notice.noticeId}">
-				[삭제]
-			</a>
+			<table class="mb-3" style="width:100%;">
+				<tr>
+					<td style="width:30%; vertical-align:middle;" align="left">
+						<a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/admin/noticeList/1">
+							목록으로
+						</a>
+					</td>
+					<td style="width:30%; vertical-align:middle;" align="right">
+						<a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/admin/modifyNotice/${notice.noticeId}">
+							수정
+						</a>
+						<a class="btn btn-outline-danger" href="${pageContext.request.contextPath}/admin/removeNotice/${notice.noticeId}">
+							삭제
+						</a>
+					</td>
+				</tr>
+			</table>
 			
 			<div>
 				<table class="table">

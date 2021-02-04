@@ -35,7 +35,10 @@
 			}
 			.layer {
 				position:absolute;
-				top:0;right:0;bottom:0;left:0;
+				top:0;
+				right:0;
+				bottom:0;
+				left:0;
 				display:flex;
 				align-items:center;
 				justify-content:center;
@@ -66,10 +69,10 @@
 		<div class="container">
 			<!-- 로그인 -->
 			<div class="centered">
-				<h3>로그인</h3>
+				<h3 class="d-flex justify-content-center mb-3">로그인</h3>
 				
 				<form action="${pageContext.request.contextPath}/login" method="post">
-					<table class="table table-borderless">
+					<table class="table table-borderless centered" style="width:80%;">
 						<tr>
 							<td>
 								<input type="text" class="form-control" name="id" placeholder="아이디" value="goodee">
@@ -82,39 +85,41 @@
 						</tr>
 						<tr>
 							<td>
-								<button type="submit" class="btn btn-success btn-block centered">로그인</button>
+								<button type="submit" class="btn btn-success btn-block">로그인</button>
 							</td>
 						<tr>
 					</table>				
 				</form>
 			</div>
-			<br>
-			
 			<!-- 공지사항 -->
-			<div>
-				<h3 class="mb-3">공지사항</h3>
+			<h3 class="mb-4">공지사항</h3>
 				
-				<div>
-					<table class="table">
-						<thead>
-							<tr>
-								<th>No.</th>
-								<th>제목</th>
-								<th>작성일자</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="n" items="${noticeList}">
-								<tr>
-									<td>${n.noticeId}</td>
-									<td>${n.noticeTitle}</td>
-									<td>${n.noticeDate}</td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-			</div>
+			<table class="table">
+				<thead>
+					<tr align="center">
+						<th style="width:15%; vertical-align:middle;">
+							No.
+						</th>
+						<th style="width:55%; vertical-align:middle;">
+							제목
+						</th>
+						<th style="width:30%; vertical-align:middle;">
+							작성일자
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="n" items="${noticeList}">
+						<tr align="center">
+							<td>${n.noticeId}</td>
+							<td align="left">
+								${n.noticeTitle}
+							</td>
+							<td>${n.noticeDate}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>				
 		</div>
 	</body>
 </html>

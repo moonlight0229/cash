@@ -116,7 +116,6 @@ public class CashbookController {
 		model.addAttribute("currentDay", targetDay.get(Calendar.DATE));
 		model.addAttribute("sumIn", sumIn); // 수입
 		model.addAttribute("sumOut", sumOut); // 지출
-		System.out.println(sumOut);
 		
 		return "cashbookByDay";
 	}

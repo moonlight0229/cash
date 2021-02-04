@@ -73,34 +73,48 @@
 			</div>
 			
 			<!-- 공지사항 -->
-			<h3 class="mb-3">공지사항</h3>
-			
-			<div class="d-flex justify-content-end">
-				<a class="btn btn-outline-primary mb-3" href="${pageContext.request.contextPath}/admin/noticeList/1">
-					더보기
-				</a>
-			</div>
-			
-			<div>
-				<table class="table">
-					<thead>
-						<tr>
-							<th>No.</th>
-							<th>제목</th>
-							<th>작성일자</th>
+			<table class="mb-3" style="width:100%;">
+				<tr>
+					<td>
+						<h3>공지사항</h3>
+					</td>
+					<td>
+						<div class="d-flex justify-content-end">
+							<a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/admin/noticeList/1">
+								더보기
+							</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<table class="table">
+				<thead>
+					<tr align="center">
+						<th style="width:15%; vertical-align:middle;">
+							No.
+						</th>
+						<th style="width:55%; vertical-align:middle;">
+							제목
+						</th>
+						<th style="width:30%; vertical-align:middle;">
+							작성일자
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="n" items="${noticeList}">
+						<tr align="center">
+							<td>${n.noticeId}</td>
+							<td align="left">
+								<a href="${pageContext.request.contextPath}/admin/noticeOne/${n.noticeId}">
+									${n.noticeTitle}
+								</a>
+							</td>
+							<td>${n.noticeDate}</td>
 						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="n" items="${noticeList}">
-							<tr>
-								<td>${n.noticeId}</td>
-								<td>${n.noticeTitle}</td>
-								<td>${n.noticeDate}</td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-			</div>
+					</c:forEach>
+				</tbody>
+			</table>
 		</div>
 	</body>
 </html>
